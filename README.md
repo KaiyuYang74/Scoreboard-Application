@@ -1,4 +1,4 @@
-#Schedule maker and scoreboard app for the knockout stage of a football cup event
+#Scoreboard application for the knockout stage of a football cup event
 
 **What will the application do?**
 
@@ -33,7 +33,8 @@ practive for me to familiarize the contents from both CPSC 110 and CPSC 210.
 
 In each round of games, the number of participant teams must be an even number to make sure every participant team gets
 assigned an opponent. As mentioned above, each round of games will eliminate half of the teams from the football 
-cup event, thus the number of teams initially entered by the user must be a multiple of 2.
+cup event, thus the number of teams initially entered by the user must equal to 2 to the power of n with n are positive 
+integers .
 
 ##User Stories
 - As a user, I want to add a new team to a list of teams

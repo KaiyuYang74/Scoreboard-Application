@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ListOfGameTest {
-    private ListOfGame testListOfGame;
+    private ListOfGame listOfGame;
     private Game testGame21;
     private Game testGame23;
 
@@ -22,70 +22,70 @@ public class ListOfGameTest {
         Team england = new Team("England");
         england.setGoals(3);
         testGame23 = new Game(japan, england);
-        testListOfGame = new ListOfGame();
+        listOfGame = new ListOfGame();
     }
 
     @Test
     public void testAddGame() {
-        assertEquals(0,testListOfGame.getSize());
-        testListOfGame.addGame(testGame21);
-        assertEquals(1,testListOfGame.getSize());
-        assertTrue(testListOfGame.getListOfGame().contains(testGame21));
+        assertEquals(0,listOfGame.getSize());
+        listOfGame.addGame(testGame21);
+        assertEquals(1,listOfGame.getSize());
+        assertTrue(listOfGame.getListOfGame().contains(testGame21));
     }
 
     @Test
     public void testRemoveGame() {
-        testListOfGame.addGame(testGame21);
-        assertEquals(1,testListOfGame.getSize());
-        assertTrue(testListOfGame.getListOfGame().contains(testGame21));
-        testListOfGame.removeGame(0);
-        assertEquals(0,testListOfGame.getSize());
-        assertFalse(testListOfGame.getListOfGame().contains(testGame21));
+        listOfGame.addGame(testGame21);
+        assertEquals(1,listOfGame.getSize());
+        assertTrue(listOfGame.getListOfGame().contains(testGame21));
+        listOfGame.removeGame(0);
+        assertEquals(0,listOfGame.getSize());
+        assertFalse(listOfGame.getListOfGame().contains(testGame21));
     }
 
     @Test
     public void testRemoveAllGames() {
-        testListOfGame.addGame(testGame21);
-        testListOfGame.addGame(testGame23);
-        assertEquals(2,testListOfGame.getSize());
-        testListOfGame.removeAllGames();
-        assertEquals(0,testListOfGame.getSize());
+        listOfGame.addGame(testGame21);
+        listOfGame.addGame(testGame23);
+        assertEquals(2,listOfGame.getSize());
+        listOfGame.removeAllGames();
+        assertEquals(0,listOfGame.getSize());
     }
 
     @Test
     public void testGetSize() {
-        assertEquals(0,testListOfGame.getSize());
-        testListOfGame.addGame(testGame21);
-        assertEquals(1,testListOfGame.getSize());
-        testListOfGame.addGame(testGame23);
-        assertEquals(2,testListOfGame.getSize());
+        assertEquals(0,listOfGame.getSize());
+        listOfGame.addGame(testGame21);
+        assertEquals(1,listOfGame.getSize());
+        listOfGame.addGame(testGame23);
+        assertEquals(2,listOfGame.getSize());
     }
 
     @Test
     public void testGetGame() {
-        testListOfGame.addGame(testGame21);
-        testListOfGame.addGame(testGame23);
-        assertEquals("Canada", testListOfGame.getGame(0).getTeam1().getName());
-        assertEquals("China", testListOfGame.getGame(0).getTeam2().getName());
-        assertEquals("Japan", testListOfGame.getGame(1).getTeam1().getName());
-        assertEquals("England", testListOfGame.getGame(1).getTeam2().getName());
+        listOfGame.addGame(testGame21);
+        listOfGame.addGame(testGame23);
+        assertEquals("Canada", listOfGame.getGame(0).getTeam1().getName());
+        assertEquals("China", listOfGame.getGame(0).getTeam2().getName());
+        assertEquals("Japan", listOfGame.getGame(1).getTeam1().getName());
+        assertEquals("England", listOfGame.getGame(1).getTeam2().getName());
     }
 
     @Test
     public void testGetListOfGame() {
-        assertEquals(0,testListOfGame.getListOfGame().size());
-        assertFalse(testListOfGame.getListOfGame().contains(testGame21));
-        testListOfGame.addGame(testGame21);
-        assertEquals(1,testListOfGame.getListOfGame().size());
-        assertTrue(testListOfGame.getListOfGame().contains(testGame21));
+        assertEquals(0,listOfGame.getListOfGame().size());
+        assertFalse(listOfGame.getListOfGame().contains(testGame21));
+        listOfGame.addGame(testGame21);
+        assertEquals(1,listOfGame.getListOfGame().size());
+        assertTrue(listOfGame.getListOfGame().contains(testGame21));
     }
 
     @Test
     public void testIsFinalGame() {
-        assertFalse(testListOfGame.isFinalGame());
-        testListOfGame.addGame(testGame21);
-        assertTrue(testListOfGame.isFinalGame());
-        testListOfGame.addGame(testGame23);
-        assertFalse(testListOfGame.isFinalGame());
+        assertFalse(listOfGame.isFinalGame());
+        listOfGame.addGame(testGame21);
+        assertTrue(listOfGame.isFinalGame());
+        listOfGame.addGame(testGame23);
+        assertFalse(listOfGame.isFinalGame());
     }
 }

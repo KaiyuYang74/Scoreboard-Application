@@ -8,92 +8,191 @@ import model.Team;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Integer.parseInt;
-
-//todo:增加抽签语句
-//todo: what if the input is invalid?
-//todo: extract the methods whenever there is a domain shift
-// 补完 Team里的methods(optiinal)
-// todo: Unit Tests
-// todo: revise the checkstyles
-// todo parameterization
+//Schedule maker and scoreboard application for the knockout stage of a football cup event
 public class ScoreboardApp {
     private Scanner input;
 
+    //EFFECTS: run the scoreboard application
     public ScoreboardApp() {
         runScoreboard();
     }
 
+    //MODIFIES: this
+    //EFFECTS: runs the scoreboard application
     private void runScoreboard() {
-        input = new Scanner((System.in));
-        System.out.println("Enter the team names in the knockout stage of 2022 World Cup separated by space: ");
-        String teamNames = input.nextLine();
-        List<String> splited = Arrays.asList(teamNames.split(" "));
         ListOfTeam listOfTeam = new ListOfTeam();
-        listOfTeam.setListOfTeams(splited.stream().map(Team::new).collect(Collectors.toList()));
-        ListOfGame games = new ListOfGame();
-        Collections.shuffle(listOfTeam.getListOfTeams());
-        generateGameSchedule(listOfTeam, games);
+        ListOfGame listOfGame = new ListOfGame();
+        List<String> splitedTeamNames = parseTeamNames();
+        convertToListOfTeam(splitedTeamNames, listOfTeam);
+        quitIfInValid(listOfTeam);
+        drawCeremony(listOfTeam);
+        generateGames(listOfTeam, listOfGame);
     }
 
-    public void generateGameSchedule(ListOfTeam l1, ListOfGame l2) {
-        l2.addGame(new Game((l1.getTeam(0)), (l1.getTeam(1))));
-        l1.removeTeam(0);
-        l1.removeTeam(0);
-        if (!l1.isEmpty()) {
-            generateGameSchedule(l1, l2);
+    /*
+    MODIFIES: this
+    EFFECTS: quite the program when the # of input teams is invalid (# of input don't equal to 2 to the power of n)
+             or quite the program when the number of input teams equals to 1
+    */
+    public void quitIfInValid(ListOfTeam listOfTeam) {
+        int numberOfTeams = listOfTeam.getListOfTeams().size();
+        if ((numberOfTeams & (numberOfTeams - 1)) != 0 || numberOfTeams == 1) {
+            System.out.println("The number of input teams is invalid");
+            System.exit(0);
         }
-        oneRound(l2, l1);
     }
 
+    /*
+    EFFECTS: give the instruction for the user to correctly input the team names
+             split the user-typed String into separated team names by space and store them in a list
+    */
+    private List<String> parseTeamNames() {
+        input = new Scanner((System.in));
+        System.out.println("Enter the team names in the knockout stage of the football cup event separated by space: ");
+        String teamNames = input.nextLine();
+        return Arrays.asList(teamNames.split(" "));
+    }
 
-    public void oneRound(ListOfGame games, ListOfTeam listOfTeam) {
-        if (games.isFinalGame()) {
-            Game finalGame = games.getGame(0);
-            theFinal(finalGame);
-            games.removeAllGames();
-        } else if (games.getSize() != 0) {
-            System.out.println("The next round of games are: ");
-            for (int k = 0; k < games.getSize(); k++) {
-                System.out.println(games.getGame(k).getTeam1().getName() + " vs " + games.getGame(k).getTeam2().getName());
-            }
-            for (Game g : games.getListOfGame()) {
-                System.out.println("Enter the game result for " + g.getTeam1().getName() + " vs " + g.getTeam2().getName() + ": ");
-                String scoreGame1 = input.nextLine();
-                String[] splited1 = scoreGame1.split(":");
-                int goalTeam1 = Integer.parseInt(splited1[0]);
-                int goalTeam2 = Integer.parseInt(splited1[1]);
+    //EFFECTS: convert a list of team names represented by strings into the corresponding ListOfTeam
+    private void convertToListOfTeam(List<String> splitedTeamNames, ListOfTeam listOfTeam) {
+        listOfTeam.setListOfTeams(splitedTeamNames.stream().map(Team::new).collect(Collectors.toList()));
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: simulate the draw ceremony
+             randomly pairing up teams from all qualified teams to generate games
+    */
+    private void drawCeremony(ListOfTeam listOfTeam) {
+        Collections.shuffle(listOfTeam.getListOfTeams());
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: generate a game for the current round
+               provoke a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
+               and provoke a mutual recursive call to simulate the games in the current round
+    */
+    public void generateGames(ListOfTeam listOfTeam, ListOfGame listOfGame) {
+        listOfGame.addGame(new Game((listOfTeam.getTeam(0)), (listOfTeam.getTeam(1))));
+        listOfTeam.removeTeam(0);
+        listOfTeam.removeTeam(0);
+        if (!listOfTeam.isEmpty()) {
+            generateGames(listOfTeam, listOfGame);
+        }
+        oneRoundGames(listOfGame, listOfTeam);
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: simulate one round of knockout listOfGame for a football cup event
+             determine the winner of each game in one round of listOfGame
+             store all the winners of the current round in a list
+             and provoke a mutual recursive call to generate listOfGame for the next round
+    */
+    public void oneRoundGames(ListOfGame listOfGame, ListOfTeam listOfTeam) {
+        if (listOfGame.isFinalGame()) {
+            Game finalGame = listOfGame.getGame(0);
+            playTheFinal(finalGame);
+            listOfGame.removeAllGames();
+        } else if (listOfGame.getSize() != 0) {
+            showTheMatchups(listOfGame);
+            for (Game g : listOfGame.getListOfGame()) {
+                String[] splitedScore = parseGameResult(g);
+                int goalTeam1 = Integer.parseInt(splitedScore[0]);
+                int goalTeam2 = Integer.parseInt(splitedScore[1]);
                 g.getTeam1().setGoals(goalTeam1);
                 g.getTeam2().setGoals(goalTeam2);
                 Team winner = g.decideWinner();
-                if (goalTeam1 != goalTeam2) {
-                    System.out.println(winner.getName() + " wins the game");
-                    feedbackForTheGame(goalTeam1, goalTeam2);
-                } else {
-                    System.out.println("The result is a draw and " + winner.getName() + " wins the penalty shootout");
-                    System.out.println("What a close game！");
-                }
+                showWinner(goalTeam1, goalTeam2, winner);
                 listOfTeam.addTeam(winner);
             }
-            games.removeAllGames();
-            generateGameSchedule(listOfTeam, games);
+            listOfGame.removeAllGames();
+            keepGoingOrQuit();
+            generateGames(listOfTeam, listOfGame);
         }
     }
 
-    public void theFinal(Game g) {
+    /*
+    MODIFIES: this
+    EFFECTS: The program will end if q was entered
+    */
+    public void keepGoingOrQuit() {
+        String command = null;
+        displayMenu();
+        command = input.nextLine();
+        command = command.toLowerCase();
+        if (command.equals("q")) {
+            System.out.println("\nGoodbye!");
+            System.exit(0);
+        }
+    }
+
+    /*
+    EFFECTS: displays menu of options to user
+             press c to continue to next round of game
+             press q to quite the scoreboard application
+    */
+    private void displayMenu() {
+        System.out.println("\tc -> continue");
+        System.out.println("\tq -> quit");
+    }
+
+    /*
+    EFFECTS: show the winner of the game
+             give the user some feedbacks on the exciting level of the game and report the total goals in the game
+    */
+    private void showWinner(int goalTeam1, int goalTeam2, Team winner) {
+        if (goalTeam1 != goalTeam2) {
+            System.out.println(winner.getName() + " wins the game");
+            feedbackForTheGame(goalTeam1, goalTeam2);
+        } else {
+            System.out.println("The result is a draw and " + winner.getName() + " wins the penalty shootout");
+            System.out.println("What a close game！");
+        }
+    }
+
+    /*
+    EFFECTS: give the instruction for the user to correctly input the game result
+                 split the user-typed String into separated scores by ":"
+    */
+    private String[] parseGameResult(Game g) {
+        String team1Name = g.getTeam1().getName();
+        String team2Name = g.getTeam2().getName();
+        System.out.println("Enter the game result for " + team1Name + " vs " + team2Name + " separated by space: ");
+        String scoreGame1 = input.nextLine();
+        return scoreGame1.split(" ");
+    }
+
+    //EFFECTS: show all the matchups (the team names on both sides of all the games)
+    private void showTheMatchups(ListOfGame listOfGame) {
+        System.out.println("The next round of listOfGame are: ");
+        for (int k = 0; k < listOfGame.getSize(); k++) {
+            String team1Name = listOfGame.getGame(k).getTeam1().getName();
+            String team2Name = listOfGame.getGame(k).getTeam2().getName();
+            System.out.println(team1Name + " vs " + team2Name);
+        }
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: simulate the final game in a football cup event
+             show the simulated champion team to the user
+    */
+    public void playTheFinal(Game g) {
         System.out.println("the final game is between " + g.getTeam1().getName() + " and " + g.getTeam2().getName());
-        System.out.println("Enter the game result for " + g.getTeam1().getName() + " vs " + g.getTeam2().getName() + ": ");
-        String scoreFinal = input.nextLine();
-        String[] splited1 = scoreFinal.split(":");
-        int goalTeam1 = Integer.parseInt(splited1[0]);
-        int goalTeam2 = Integer.parseInt(splited1[1]);
+        String[] splitedScore = parseGameResult(g);
+        int goalTeam1 = Integer.parseInt(splitedScore[0]);
+        int goalTeam2 = Integer.parseInt(splitedScore[1]);
         g.getTeam1().setGoals(goalTeam1);
         g.getTeam2().setGoals(goalTeam2);
         Team champion = g.decideWinner();
+        showWinner(goalTeam1, goalTeam2, champion);
         System.out.println("The winner of 2022 World Cup is " + champion.getName());
         System.out.println("Congratulations to " + champion.getName() + "!");
     }
 
+    //EFFECTS: give the user some feedbacks on the exciting level of the game and report the total goals in the game
     public void feedbackForTheGame(int goalTeam1, int goalTeam2) {
         if (goalTeam1 + goalTeam2 < 2) {
             System.out.println("What a boring game with only one goal!");
