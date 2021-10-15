@@ -9,13 +9,14 @@ ceremony. In real world, the draw ceremony means randomly pairing up teams from 
 for the next round. Hence, randomization was introduced in this program to simulate this process. Notice that the draw
 ceremonies will be held before each round of games. After the draw ceremony, the program will show the specific 
 matchups on the screen to the user. The user need to enter the game results for each game in this round of games. The 
-program will keep track of the winners of each game and will store the winners in this round in a list. The winners in a
+program will keep track of the winners of each game and will store the winners in this round in a list of teams. The winners in a
 round of games will be the participant teams for the next round of games. The losers from the games are eliminated from 
 this football cup event and not longer being considered. Then, the program will proceed to the next round of games. After 
 several rounds of games, the final champion of this football cup event will be determined. Since in each round of games, the 
-functionality is similar, recursive calls (natural recursion and mutual recursion) were constructed. Moreover, when the
+functionality is similar, recursive calls (natural recursion and mutual recursion) were constructed. Plus, when the
 football cup event has actually started in real world, this app can serve as a scoreboard to keep track of the game results
-and goal information on the purpose of statistics analysis.
+and goal information on the purpose of statistics analysis. Moreover, the user can decide whether to continue this
+simulation or quit the program by keyboard operations.
 
 **Who will use this application?**
 
@@ -35,6 +36,12 @@ In each round of games, the number of participant teams must be an even number t
 assigned an opponent. As mentioned above, each round of games will eliminate half of the teams from the football 
 cup event, thus the number of teams initially entered by the user must equal to 2 to the power of n with n are positive 
 integers .
+
+##Format for the user to enter the inputs
+- team/score inputs should be separated by space. Only by doing so, the program can identify the information correctly.
+- The input scores for a game should strictly follow: team1's score [space] team2's score.
+- An example for team inputs: Canada China USA Japan Germany England Italy Brazil
+- An example for team inputs: 1 2
 
 ##User Stories
 - As a user, I want to add arbitrary-sized number of teams to a list of teams.
