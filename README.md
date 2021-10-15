@@ -1,4 +1,4 @@
-#Schedule maker and scoreboard for the knockout stage of a football cup event
+#Schedule maker and scoreboard app for the knockout stage of a football cup event
 
 **What will the application do?**
 
@@ -38,8 +38,8 @@ cup event, thus the number of teams initially entered by the user must be a mult
 ##User Stories
 - As a user, I want to add a new team to a list of teams
 - As a user, I want to add a new game to a list of games
-- As a user, I want to remove a team from a list of teams
-- As a user, I want to remove a game from a list of games
+- As a user, I want to remove a team on a specified index from a list of teams
+- As a user, I want to remove a game on a specified index from a list of games
 - As a user, I want to remove all the games from an existing list of games. 
 - As a user, I want to simulate the draw ceremonies.
 - As a user, I want to be able to simulate the whole process of the knockout stage of a football cup event or to keep 

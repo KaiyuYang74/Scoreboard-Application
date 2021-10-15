@@ -39,5 +39,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="guava-31.0.1-jre" level="project" />
+    <orderEntry type="library" exported="" name="hamcrest" level="project" />
   </component>
 </module>

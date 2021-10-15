@@ -2,63 +2,53 @@ package model;
 
 import java.util.Random;
 
+//Represents a game with the names of two engaged teams
 public class Game {
-    private Team team1;
-    private Team team2;
-    private int team1Goals;
-    private int team2Goals;
-
-    public enum OutCome {
-        WIN, LOSS, DRAW
-    }
+    private Team team1; // name of the first team in the game
+    private Team team2; // name of the second team in the game
 
     public Game(Team team1, Team team2) {
         this.team1 = team1;
         this.team2 = team2;
-
     }
 
+    /*
+     *EFFECTS: Compare the goals scored by both teams in a game and return the winner team
+     *         if the result is a draw (the number of goals scored by the two teams are equal),
+     *         then play a penalty kick game to determine the winner
+     */
     public Team decideWinner() {
-        if (team1Goals > team2Goals) {
-            team1.winTheGame();
-            team2.loseTheGame();
-            System.out.println(team1.getName() + " wins the game");
+        if (team1.getGoals() > team2.getGoals()) {
             return team1;
-        } else if (team1Goals < team2Goals) {
-            team1.loseTheGame();
-            team2.winTheGame();
-            System.out.println(team2.getName() + " wins the game");
+        } else if (team1.getGoals() < team2.getGoals()) {
             return team2;
         } else {
-            Random ran = new Random();
-            int penaltyKick = ran.nextInt(2) + 1;
-            if (penaltyKick == 0) {
-                System.out.println("The result is a draw and " + team1.getName() + " wins the penalty shootout");
-                System.out.println("What a close game！");
-                return team1;
-            } else {
-                System.out.println("The result is a draw and " + team1.getName() + " wins the penalty shootout");
-                System.out.println("What a close game！");
-                return team2;
-            }
+            return penaltyKick();
         }
     }
 
+    //todo: explain why return random team in readme
+    /*
+     *EFFECTS: Simulate the penalty kick game when the game is a draw,
+     *          randomly return a team as the winner of the penalty kick game
+     */
+    public Team penaltyKick() {
+        Random random = new Random();
+        int penaltyKickResult = random.nextInt(2);
+        if (penaltyKickResult == 0) {
+            return team1;
+        } else {
+            return team2;
+        }
+    }
 
-    //getters
+    //getter
     public Team getTeam1() {
         return team1;
     }
 
+    //getter
     public Team getTeam2() {
         return team2;
-    }
-   //setters
-    public void setTeam1Goals(int team1Goals) {
-        this.team1Goals = team1Goals;
-    }
-
-    public void setTeam2Goals(int team2Goals) {
-        this.team2Goals = team2Goals;
     }
 }
