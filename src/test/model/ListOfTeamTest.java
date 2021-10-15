@@ -14,12 +14,14 @@ public class ListOfTeamTest {
     private Team canada;
     private Team china;
     private Team japan;
+    private Team usa;
 
     @BeforeEach
     public void runBefore() {
         canada = new Team("Canada");
         china = new Team("China");
         japan = new Team("Japan");
+        usa = new Team("USA");
         testListOfTeam = new ListOfTeam();
     }
 
@@ -66,19 +68,20 @@ public class ListOfTeamTest {
     }
 
     @Test
-    public void testSetListOfTeams() {
+    public void testAddListOfTeams() {
         List<Team> teams = new ArrayList<>();
         teams.add(canada);
         teams.add(china);
         teams.add(japan);
-        assertEquals(0, testListOfTeam.getListOfTeams().size());
-        for (Team s : teams) {
-            assertFalse(testListOfTeam.getListOfTeams().contains(s));
-        }
-        testListOfTeam.setListOfTeams(teams);
-        assertEquals(3, testListOfTeam.getListOfTeams().size());
+        assertEquals(3, teams.size());
+        testListOfTeam.addTeam(usa);
+        assertEquals(1, testListOfTeam.getListOfTeams().size());
+        testListOfTeam.addListOfTeams(teams);
+        assertEquals(4, testListOfTeam.getListOfTeams().size());
         for (Team s : teams) {
             assertTrue(testListOfTeam.getListOfTeams().contains(s));
         }
+        assertTrue(testListOfTeam.getListOfTeams().contains(usa));
     }
 }
+

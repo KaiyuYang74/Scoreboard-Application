@@ -27,7 +27,6 @@ public class Game {
         }
     }
 
-    //todo: explain why return random team in readme
     /*
      *EFFECTS: Simulate the penalty kick game when the game is a draw,
      *          randomly return a team as the winner of the penalty kick game

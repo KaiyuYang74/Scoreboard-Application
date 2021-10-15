@@ -12,6 +12,7 @@ class GameTest {
     private Game testGame21;
     private Game testGame23;
     private Game testGame11;
+    private Game testGame22;
 
     @BeforeEach
     public void runBefore() {
@@ -58,6 +59,17 @@ class GameTest {
         List<String> usaAndBrazil = new ArrayList<>();
         usaAndBrazil.add("USA");
         usaAndBrazil.add("Brazil");
+        Team japan = new Team("Japan");
+        japan.setGoals(2);
+        Team england = new Team("England");
+        england.setGoals(2);
+        testGame22 = new Game(japan, england);
+        List<String> japanAndEngland = new ArrayList<>();
+        japanAndEngland.add("Japan");
+        japanAndEngland.add("English");
         assertTrue(usaAndBrazil.contains(testGame11.penaltyKick().getName()));
+        assertTrue(usaAndBrazil.contains(testGame11.penaltyKick().getName()));
+        assertTrue(japanAndEngland.contains(testGame22.penaltyKick().getName()));
+        assertTrue(japanAndEngland.contains(testGame22.penaltyKick().getName()));
     }
 }

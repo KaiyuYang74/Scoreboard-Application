@@ -55,7 +55,7 @@ public class ScoreboardApp {
 
     //EFFECTS: convert a list of team names represented by strings into the corresponding ListOfTeam
     private void convertToListOfTeam(List<String> splitedTeamNames, ListOfTeam listOfTeam) {
-        listOfTeam.setListOfTeams(splitedTeamNames.stream().map(Team::new).collect(Collectors.toList()));
+        listOfTeam.addListOfTeams(splitedTeamNames.stream().map(Team::new).collect(Collectors.toList()));
     }
 
     /*

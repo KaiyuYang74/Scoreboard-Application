@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // Represents a list of teams
 public class ListOfTeam {
@@ -47,7 +49,9 @@ public class ListOfTeam {
     }
 
     //setter
-    public void setListOfTeams(List<Team> listOfTeam) {
-        this.listOfTeam = listOfTeam;
+    public void addListOfTeams(List<Team> listOfTeam) {
+        this.listOfTeam = Stream.concat(this.listOfTeam.stream(), listOfTeam.stream()).collect(Collectors.toList());
     }
 }
+
+
