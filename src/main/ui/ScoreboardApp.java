@@ -32,7 +32,7 @@ public class ScoreboardApp {
     /*
     MODIFIES: this
     EFFECTS: quite the program when the # of input teams is invalid (# of input don't equal to 2 to the power of n)
-             or quite the program when the number of input teams equals to 1
+             n are positive integers
     */
     public void quitIfInValid(ListOfTeam listOfTeam) {
         int numberOfTeams = listOfTeam.getListOfTeams().size();

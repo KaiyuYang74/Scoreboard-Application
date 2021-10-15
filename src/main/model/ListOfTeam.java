@@ -50,6 +50,4 @@ public class ListOfTeam {
     public void setListOfTeams(List<Team> listOfTeam) {
         this.listOfTeam = listOfTeam;
     }
-
-
 }

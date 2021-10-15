@@ -11,7 +11,7 @@ ceremonies will be held before each round of games. After the draw ceremony, the
 matchups on the screen to the user. The user need to enter the game results for each game in this round of games. The 
 program will keep track of the winners of each game and will store the winners in this round in a list. The winners in a
 round of games will be the participant teams for the next round of games. The losers from the games are eliminated from 
-this World Cup event and not longer being considered. Then, the program will proceed to the next round of games. After 
+this football cup event and not longer being considered. Then, the program will proceed to the next round of games. After 
 several rounds of games, the final champion of this football cup event will be determined. Since in each round of games, the 
 functionality is similar, recursive calls (natural recursion and mutual recursion) were constructed. Moreover, when the
 football cup event has actually started in real world, this app can serve as a scoreboard to keep track of the game results
@@ -37,12 +37,8 @@ cup event, thus the number of teams initially entered by the user must equal to 
 integers .
 
 ##User Stories
-- As a user, I want to add a new team to a list of teams
-- As a user, I want to add a new game to a list of games
-- As a user, I want to remove a team on a specified index from a list of teams
-- As a user, I want to remove a game on a specified index from a list of games
-- As a user, I want to remove all the games from an existing list of games. 
-- As a user, I want to simulate the draw ceremonies.
-- As a user, I want to be able to simulate the whole process of the knockout stage of a football cup event or to keep 
-track of the scores of the games have finished in previous rounds. 
-Specifically, the user can input the result for each game in each round until the final champion has been determined
+- As a user, I want to add arbitrary-sized number of teams to a list of teams.
+- As a user, I want to simulate the draw ceremonies before each round of games.
+- As a user, I want to be able to simulate the whole process of the knockout stage of a football cup event from the
+draw ceremony of the initial input teams until the final champion has been determined.
+- As a user, I want to be able to choose between continuing the simulation and quiting it after each round of games.
