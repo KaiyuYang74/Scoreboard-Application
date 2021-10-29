@@ -275,39 +275,22 @@ public class ScoreboardApp {
         }
     }
 
-    // EFFECTS: saves the listOfGame to file
-    private void saveListOfGame() {
-        try {
-            jsonWriter.open();
-            jsonWriter.write(listOfGame);
-            jsonWriter.close();
-            System.out.println("Saved " + listOfGame + " to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
-        }
-    }
-
     // MODIFIES: this
-    // EFFECTS: loads listOfTeam from file
+    // EFFECTS: loads listOfTeam from file if the data file is not empty
+    //          initialize a new Scoreboard if the data file is empty
     private void loadListOfTeam() {
         try {
             listOfTeam = jsonReader.readTeams();
-            System.out.println("Loaded " + listOfTeam + " from " + JSON_STORE);
-        } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: loads listOfGame from file
-    private void loadListOfGame() {
-        try {
-            listOfGame = jsonReader.readGames();
-            System.out.println("Loaded " + listOfGame + " from " + JSON_STORE);
+            if (!listOfTeam.isEmpty()) {
+                System.out.println("Loaded " + listOfTeam + " from " + JSON_STORE);
+            } else {
+                initNewScoreboard();
+            }
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 }
+
 
 

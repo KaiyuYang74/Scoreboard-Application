@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Represents a list of games
-public class ListOfGame implements Writable {
+public class ListOfGame {
     private List<Game> listOfGame;
 
     /*
@@ -69,21 +69,4 @@ public class ListOfGame implements Writable {
         return listOfGame.size() == 1;
     }
 
-    @Override
-    // EFFECTS: returns a listOfGame as JSON object
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("listOfGame",gamesToJson());
-        return json;
-    }
-
-    // EFFECTS: store all games in a listOfGame in a
-    private JSONArray gamesToJson() {
-        JSONArray jsonArray = new JSONArray();
-
-        for (Game g : listOfGame) {
-            jsonArray.put(g.toJson());
-        }
-        return jsonArray;
-    }
 }

@@ -6,7 +6,7 @@ import persistence.Writable;
 import java.util.Random;
 
 //Represents a game with the names of two engaged teams
-public class Game implements Writable {
+public class Game {
     private Team team1; // name of the first team in the game
     private Team team2; // name of the second team in the game
 
@@ -58,12 +58,4 @@ public class Game implements Writable {
         return team2;
     }
 
-    @Override
-    // EFFECTS: returns a game as JSON object
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("team1", team1);
-        json.put("team2", team2);
-        return json;
-    }
 }

@@ -1,5 +1,8 @@
 package model;
 
+import model.Game;
+import model.ListOfGame;
+import model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
