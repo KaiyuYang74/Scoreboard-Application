@@ -54,4 +54,4 @@ draw ceremony of the initial input teams until the final champion has been deter
 games from file.
 
 ##Citation
-- My JSON related codes (persistence realization) are modeled from the demo application provided by Prof.Paul Carter.
+- My JSON related codes (persistence realization) are modeled from the demo application provided by Prof. Paul Carter.
