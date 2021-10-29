@@ -49,10 +49,9 @@ integers .
 - As a user, I want to be able to simulate the whole process of the knockout stage of a football cup event from the
 draw ceremony of the initial input teams until the final champion has been determined.
 - As a user, I want to be able to choose between continuing the simulation and quiting it after each round of games.
-- As a user, when I select the quit option from the application menu, I want to be reminded to save the candidate teams   
-for next round of knockout games to file and have the option to do so or not.
+- As a user, when I select the quit option from the application menu, I want to be reminded to save the candidate teams for next round of knockout games to file and have the option to do so or not.
 - As a user, when I start the application, I want to be given the option to load my the listOfTeam for next round of
 games from file.
 
 ##Citation
--My codes of phase two(persistence realization) are modeled from the demo application provided by Prof.Paul Carter.
+- My JSON related codes (persistence realization) are modeled from the demo application provided by Prof.Paul Carter.
