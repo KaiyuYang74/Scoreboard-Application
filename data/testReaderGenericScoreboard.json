@@ -1,0 +1,18 @@
+{"listOfTeam": [
+  {
+    "name": "Canada",
+    "goals": 1
+  },
+  {
+    "name": "USA",
+    "goals": 2
+  },
+  {
+    "name": "Japan",
+    "goals": 3
+  },
+  {
+    "name": "China",
+    "goals": 3
+  }
+]}
