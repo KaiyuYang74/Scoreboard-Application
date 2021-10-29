@@ -4,29 +4,72 @@ import model.Game;
 import model.ListOfGame;
 import model.ListOfTeam;
 import model.Team;
-
+import persistence.JsonReader;
+import persistence.JsonWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//Schedule maker and scoreboard application for the knockout stage of a football cup event
+//Represents a schedule maker and scoreboard application for the knockout stage of a football cup event
 public class ScoreboardApp {
-    private Scanner input;
+    private static final String JSON_STORE = "./data/scoreboard.json";
+    private final Scanner input;
+    private String command;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
+    private ListOfTeam listOfTeam;
+    private ListOfGame listOfGame;
 
-    //EFFECTS: run the scoreboard application
+    /*
+    MODIFIES: this
+    EFFECTS: initialize some fields and run the scoreboard application
+    */
     public ScoreboardApp() {
+        input = new Scanner((System.in));
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runScoreboard();
     }
 
-    //MODIFIES: this
-    //EFFECTS: runs the scoreboard application
+    /*
+    MODIFIES: this
+    EFFECTS: run the scoreboard application
+    */
     private void runScoreboard() {
-        ListOfTeam listOfTeam = new ListOfTeam();
-        ListOfGame listOfGame = new ListOfGame();
+        loadScoreboard();
+        generateGames();
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: ask the user whether to load Scoreboard from file or not
+    */
+    private void loadScoreboard() {
+        System.out.println("Reload the scoreboard?");
+        System.out.println("\ty -> yes");
+        System.out.println("\tn -> no");
+        command = input.nextLine();
+        command = command.toLowerCase();
+        if (command.equals("y")) {
+            loadListOfTeam();
+            listOfGame = new ListOfGame();
+        } else {
+            initNewScoreboard();
+        }
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: set up a new scoreboard and initialize it
+    */
+    private void initNewScoreboard() {
+        listOfTeam = new ListOfTeam();
+        listOfGame = new ListOfGame();
         List<String> splitedTeamNames = parseTeamNames();
-        convertToListOfTeam(splitedTeamNames, listOfTeam);
+        convertToListOfTeam(splitedTeamNames);
         quitIfInValid(listOfTeam);
         drawCeremony(listOfTeam);
-        generateGames(listOfTeam, listOfGame);
     }
 
     /*
@@ -34,7 +77,7 @@ public class ScoreboardApp {
     EFFECTS: quite the program when the # of input teams is invalid (# of input don't equal to 2 to the power of n)
              n are positive integers
     */
-    public void quitIfInValid(ListOfTeam listOfTeam) {
+    private void quitIfInValid(ListOfTeam listOfTeam) {
         int numberOfTeams = listOfTeam.getListOfTeams().size();
         if ((numberOfTeams & (numberOfTeams - 1)) != 0 || numberOfTeams == 1) {
             System.out.println("The number of input teams is invalid");
@@ -47,14 +90,13 @@ public class ScoreboardApp {
              split the user-typed String into separated team names by space and store them in a list
     */
     private List<String> parseTeamNames() {
-        input = new Scanner((System.in));
         System.out.println("Enter the team names in the knockout stage of the football cup event separated by space: ");
         String teamNames = input.nextLine();
         return Arrays.asList(teamNames.split(" "));
     }
 
     //EFFECTS: convert a list of team names represented by strings into the corresponding ListOfTeam
-    private void convertToListOfTeam(List<String> splitedTeamNames, ListOfTeam listOfTeam) {
+    private void convertToListOfTeam(List<String> splitedTeamNames) {
         listOfTeam.addListOfTeams(splitedTeamNames.stream().map(Team::new).collect(Collectors.toList()));
     }
 
@@ -69,28 +111,27 @@ public class ScoreboardApp {
 
     /*
     MODIFIES: this
-    EFFECTS: generate a game for the current round
-               provoke a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
-               and provoke a mutual recursive call to simulate the games in the current round
+    EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
+             and provoke a mutual recursive call to simulate the games in the current round
     */
-    public void generateGames(ListOfTeam listOfTeam, ListOfGame listOfGame) {
+    private void generateGames() {
         listOfGame.addGame(new Game((listOfTeam.getTeam(0)), (listOfTeam.getTeam(1))));
         listOfTeam.removeTeam(0);
         listOfTeam.removeTeam(0);
         if (!listOfTeam.isEmpty()) {
-            generateGames(listOfTeam, listOfGame);
+            generateGames();
         }
-        oneRoundGames(listOfGame, listOfTeam);
+        oneRoundGames();
     }
 
     /*
     MODIFIES: this
-    EFFECTS: simulate one round of knockout listOfGame for a football cup event
-             determine the winner of each game in one round of listOfGame
+    EFFECTS: simulate one round of knockout games for a football cup event
+             determine the winner of each game in one round of games
              store all the winners of the current round in a list
-             and provoke a mutual recursive call to generate listOfGame for the next round
+             and provoke a mutual recursive call to generate games for the next round
     */
-    public void oneRoundGames(ListOfGame listOfGame, ListOfTeam listOfTeam) {
+    private void oneRoundGames() {
         if (listOfGame.isFinalGame()) {
             Game finalGame = listOfGame.getGame(0);
             playTheFinal(finalGame);
@@ -108,32 +149,49 @@ public class ScoreboardApp {
                 listOfTeam.addTeam(winner);
             }
             listOfGame.removeAllGames();
-            keepGoingOrQuit();
-            generateGames(listOfTeam, listOfGame);
+            displayMenuQuitContinue();
+            quit();
+            drawCeremony(listOfTeam);
+            generateGames();
         }
     }
 
     /*
     MODIFIES: this
     EFFECTS: The program will end if q was entered
+             the user will be reminded to save the teams for next round to file and have the option to do so or not.
     */
-    public void keepGoingOrQuit() {
-        String command = null;
-        displayMenu();
+    private void quit() {
         command = input.nextLine();
         command = command.toLowerCase();
         if (command.equals("q")) {
-            System.out.println("\nGoodbye!");
+            saveScoreboard();
             System.exit(0);
+            System.out.println("\nGoodbye!");
         }
     }
 
     /*
-    EFFECTS: displays menu of options to user
-             press c to continue to next round of game
+    MODIFIES: this
+    EFFECTS: save the teams for next round to file if the user chose to do so
+    */
+    private void saveScoreboard() {
+        System.out.println("save the scoreboard?");
+        System.out.println("\ty -> yes");
+        System.out.println("\tn -> no");
+        command = input.nextLine();
+        command = command.toLowerCase();
+        if (command.equals("y")) {
+            saveListOfTeam();
+        }
+    }
+
+    /*
+    EFFECTS: displays menu of options to user after having finished one round of games
+             press c to continue to next round of games
              press q to quite the scoreboard application
     */
-    private void displayMenu() {
+    private void displayMenuQuitContinue() {
         System.out.println("\tc -> continue");
         System.out.println("\tq -> quit");
     }
@@ -154,7 +212,7 @@ public class ScoreboardApp {
 
     /*
     EFFECTS: give the instruction for the user to correctly input the game result
-                 split the user-typed String into separated scores by ":"
+                 split the user-typed String into separated scores by space
     */
     private String[] parseGameResult(Game g) {
         String team1Name = g.getTeam1().getName();
@@ -179,7 +237,7 @@ public class ScoreboardApp {
     EFFECTS: simulate the final game in a football cup event
              show the simulated champion team to the user
     */
-    public void playTheFinal(Game g) {
+    private void playTheFinal(Game g) {
         System.out.println("the final game is between " + g.getTeam1().getName() + " and " + g.getTeam2().getName());
         String[] splitedScore = parseGameResult(g);
         int goalTeam1 = Integer.parseInt(splitedScore[0]);
@@ -193,7 +251,7 @@ public class ScoreboardApp {
     }
 
     //EFFECTS: give the user some feedbacks on the exciting level of the game and report the total goals in the game
-    public void feedbackForTheGame(int goalTeam1, int goalTeam2) {
+    private void feedbackForTheGame(int goalTeam1, int goalTeam2) {
         if (goalTeam1 + goalTeam2 < 2) {
             System.out.println("What a boring game with only one goal!");
         } else if (goalTeam1 != goalTeam2 && goalTeam1 + goalTeam2 > 3) {
@@ -202,6 +260,52 @@ public class ScoreboardApp {
         } else if (goalTeam1 != goalTeam2) {
             int totalGoals = goalTeam1 + goalTeam2;
             System.out.println("That's a pretty uneventful game with " + totalGoals + " goals");
+        }
+    }
+
+    // EFFECTS: saves the listOfTeam to file
+    private void saveListOfTeam() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(listOfTeam);
+            jsonWriter.close();
+            System.out.println("Saved " + listOfTeam + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // EFFECTS: saves the listOfGame to file
+    private void saveListOfGame() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(listOfGame);
+            jsonWriter.close();
+            System.out.println("Saved " + listOfGame + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads listOfTeam from file
+    private void loadListOfTeam() {
+        try {
+            listOfTeam = jsonReader.readTeams();
+            System.out.println("Loaded " + listOfTeam + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads listOfGame from file
+    private void loadListOfGame() {
+        try {
+            listOfGame = jsonReader.readGames();
+            System.out.println("Loaded " + listOfGame + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 }

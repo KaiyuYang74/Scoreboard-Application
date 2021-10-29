@@ -66,7 +66,7 @@ class GameTest {
         testGame22 = new Game(japan, england);
         List<String> japanAndEngland = new ArrayList<>();
         japanAndEngland.add("Japan");
-        japanAndEngland.add("English");
+        japanAndEngland.add("England");
         assertTrue(usaAndBrazil.contains(testGame11.penaltyKick().getName()));
         assertTrue(usaAndBrazil.contains(testGame11.penaltyKick().getName()));
         assertTrue(japanAndEngland.contains(testGame22.penaltyKick().getName()));
