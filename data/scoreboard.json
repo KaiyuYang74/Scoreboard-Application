@@ -1,10 +1,10 @@
 {"listOfTeam": [
     {
-        "name": "c",
+        "name": "Japan",
         "goals": 1
     },
     {
-        "name": "b",
-        "goals": 2
+        "name": "China",
+        "goals": 3
     }
 ]}

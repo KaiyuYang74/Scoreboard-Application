@@ -1,0 +1,328 @@
+<html>
+<head>
+<title>ScoreboardApp.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ScoreboardApp.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">ui</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">model.Game</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">model.ListOfGame</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">model.ListOfTeam</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">model.Team</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">persistence.JsonReader</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">persistence.JsonWriter</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.io.FileNotFoundException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.io.IOException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.List</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.stream.Collectors</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">javax.swing.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">javax.swing.border.EmptyBorder</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.*</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.event.ActionEvent</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.awt.event.ActionListener</span><span class="s0">;</span>
+
+<span class="s2">//Represents a schedule maker and scoreboard application for the knockout stage of a football cup event</span>
+<span class="s0">public class </span><span class="s1">ScoreboardApp </span><span class="s0">extends </span><span class="s1">JFrame </span><span class="s0">implements </span><span class="s1">ActionListener {</span>
+    <span class="s0">private static final </span><span class="s1">String JSON_STORE = </span><span class="s3">&quot;./data/scoreboard.json&quot;</span><span class="s0">;</span>
+    <span class="s0">private final </span><span class="s1">Scanner input</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">String command</span><span class="s0">;</span>
+    <span class="s0">private final </span><span class="s1">JsonWriter jsonWriter</span><span class="s0">;</span>
+    <span class="s0">private final </span><span class="s1">JsonReader jsonReader</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">ListOfTeam listOfTeam</span><span class="s0">;</span>
+    <span class="s0">private </span><span class="s1">ListOfGame listOfGame</span><span class="s0">;</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: initialize some fields and run the scoreboard application 
+    */</span>
+    <span class="s0">public </span><span class="s1">ScoreboardApp() {</span>
+        <span class="s1">input = </span><span class="s0">new </span><span class="s1">Scanner((System.in))</span><span class="s0">;</span>
+        <span class="s1">jsonWriter = </span><span class="s0">new </span><span class="s1">JsonWriter(JSON_STORE)</span><span class="s0">;</span>
+        <span class="s1">jsonReader = </span><span class="s0">new </span><span class="s1">JsonReader(JSON_STORE)</span><span class="s0">;</span>
+        <span class="s1">runScoreboard()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: run the scoreboard application 
+    */</span>
+    <span class="s0">private void </span><span class="s1">runScoreboard() {</span>
+        <span class="s1">loadScoreboard()</span><span class="s0">;</span>
+        <span class="s1">generateGames()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: ask the user whether to load Scoreboard from file or not 
+    */</span>
+    <span class="s0">private void </span><span class="s1">loadScoreboard() {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;Reload the scoreboard?&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">y -&gt; yes&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">n -&gt; no&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">command = input.nextLine()</span><span class="s0">;</span>
+        <span class="s1">command = command.toLowerCase()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(command.equals(</span><span class="s3">&quot;y&quot;</span><span class="s1">)) {</span>
+            <span class="s1">loadListOfTeam()</span><span class="s0">;</span>
+            <span class="s1">listOfGame = </span><span class="s0">new </span><span class="s1">ListOfGame()</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">initNewScoreboard()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: set up a new scoreboard and initialize it 
+    */</span>
+    <span class="s0">private void </span><span class="s1">initNewScoreboard() {</span>
+        <span class="s1">listOfTeam = </span><span class="s0">new </span><span class="s1">ListOfTeam()</span><span class="s0">;</span>
+        <span class="s1">listOfGame = </span><span class="s0">new </span><span class="s1">ListOfGame()</span><span class="s0">;</span>
+        <span class="s1">List&lt;String&gt; splitedTeamNames = parseTeamNames()</span><span class="s0">;</span>
+        <span class="s1">convertToListOfTeam(splitedTeamNames)</span><span class="s0">;</span>
+        <span class="s1">quitIfInValid(listOfTeam)</span><span class="s0">;</span>
+        <span class="s1">drawCeremony(listOfTeam)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: quite the program when the # of input teams is invalid (# of input don't equal to 2 to the power of n) 
+             n are positive integers 
+    */</span>
+    <span class="s0">private void </span><span class="s1">quitIfInValid(ListOfTeam listOfTeam) {</span>
+        <span class="s0">int </span><span class="s1">numberOfTeams = listOfTeam.getListOfTeams().size()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">((numberOfTeams &amp; (numberOfTeams - </span><span class="s4">1</span><span class="s1">)) != </span><span class="s4">0 </span><span class="s1">|| numberOfTeams == </span><span class="s4">1</span><span class="s1">) {</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;The number of input teams is invalid&quot;</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">System.exit(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    EFFECTS: give the instruction for the user to correctly input the team names 
+             split the user-typed String into separated team names by space and store them in a list 
+    */</span>
+    <span class="s0">private </span><span class="s1">List&lt;String&gt; parseTeamNames() {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;Enter the team names in the knockout stage of the football cup event separated by space: &quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">String teamNames = input.nextLine()</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">Arrays.asList(teamNames.split(</span><span class="s3">&quot; &quot;</span><span class="s1">))</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//EFFECTS: convert a list of team names represented by strings into the corresponding ListOfTeam</span>
+    <span class="s0">private void </span><span class="s1">convertToListOfTeam(List&lt;String&gt; splitedTeamNames) {</span>
+        <span class="s1">listOfTeam.addListOfTeams(splitedTeamNames.stream().map(Team::</span><span class="s0">new</span><span class="s1">).collect(Collectors.toList()))</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: simulate the draw ceremony 
+             randomly pairing up teams from all qualified teams to generate games 
+    */</span>
+    <span class="s0">private void </span><span class="s1">drawCeremony(ListOfTeam listOfTeam) {</span>
+        <span class="s1">Collections.shuffle(listOfTeam.getListOfTeams())</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round 
+             and provoke a mutual recursive call to simulate the games in the current round 
+    */</span>
+    <span class="s0">private void </span><span class="s1">generateGames() {</span>
+        <span class="s1">listOfGame.addGame(</span><span class="s0">new </span><span class="s1">Game((listOfTeam.getTeam(</span><span class="s4">0</span><span class="s1">))</span><span class="s0">, </span><span class="s1">(listOfTeam.getTeam(</span><span class="s4">1</span><span class="s1">))))</span><span class="s0">;</span>
+        <span class="s1">listOfTeam.removeTeam(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">listOfTeam.removeTeam(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(!listOfTeam.isEmpty()) {</span>
+            <span class="s1">generateGames()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s1">oneRoundGames()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: simulate one round of knockout games for a football cup event 
+             determine the winner of each game in one round of games 
+             store all the winners of the current round in a list 
+             and provoke a mutual recursive call to generate games for the next round 
+    */</span>
+    <span class="s0">private void </span><span class="s1">oneRoundGames() {</span>
+        <span class="s0">if </span><span class="s1">(listOfGame.isFinalGame()) {</span>
+            <span class="s1">Game finalGame = listOfGame.getGame(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">playTheFinal(finalGame)</span><span class="s0">;</span>
+            <span class="s1">listOfGame.removeAllGames()</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else if </span><span class="s1">(listOfGame.getSize() != </span><span class="s4">0</span><span class="s1">) {</span>
+            <span class="s1">showTheMatchups(listOfGame)</span><span class="s0">;</span>
+            <span class="s0">for </span><span class="s1">(Game g : listOfGame.getListOfGame()) {</span>
+                <span class="s1">String[] splitedScore = parseGameResult(g)</span><span class="s0">;</span>
+                <span class="s0">int </span><span class="s1">goalTeam1 = Integer.parseInt(splitedScore[</span><span class="s4">0</span><span class="s1">])</span><span class="s0">;</span>
+                <span class="s0">int </span><span class="s1">goalTeam2 = Integer.parseInt(splitedScore[</span><span class="s4">1</span><span class="s1">])</span><span class="s0">;</span>
+                <span class="s1">g.getTeam1().setGoals(goalTeam1)</span><span class="s0">;</span>
+                <span class="s1">g.getTeam2().setGoals(goalTeam2)</span><span class="s0">;</span>
+                <span class="s1">Team winner = g.decideWinner()</span><span class="s0">;</span>
+                <span class="s1">showWinner(goalTeam1</span><span class="s0">, </span><span class="s1">goalTeam2</span><span class="s0">, </span><span class="s1">winner)</span><span class="s0">;</span>
+                <span class="s1">listOfTeam.addTeam(winner)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s1">listOfGame.removeAllGames()</span><span class="s0">;</span>
+            <span class="s1">displayMenuQuitContinue()</span><span class="s0">;</span>
+            <span class="s1">quit()</span><span class="s0">;</span>
+            <span class="s1">drawCeremony(listOfTeam)</span><span class="s0">;</span>
+            <span class="s1">generateGames()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: The program will end if q was entered 
+             the user will be reminded to save the teams for next round to file and have the option to do so or not. 
+    */</span>
+    <span class="s0">private void </span><span class="s1">quit() {</span>
+        <span class="s1">command = input.nextLine()</span><span class="s0">;</span>
+        <span class="s1">command = command.toLowerCase()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(command.equals(</span><span class="s3">&quot;q&quot;</span><span class="s1">)) {</span>
+            <span class="s1">saveScoreboard()</span><span class="s0">;</span>
+            <span class="s1">System.exit(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">Goodbye!&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: save the teams for next round to file if the user chose to do so 
+    */</span>
+    <span class="s0">private void </span><span class="s1">saveScoreboard() {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;save the scoreboard?&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">y -&gt; yes&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">n -&gt; no&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">command = input.nextLine()</span><span class="s0">;</span>
+        <span class="s1">command = command.toLowerCase()</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(command.equals(</span><span class="s3">&quot;y&quot;</span><span class="s1">)) {</span>
+            <span class="s1">saveListOfTeam()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    EFFECTS: displays menu of options to user after having finished one round of games 
+             press c to continue to next round of games 
+             press q to quite the scoreboard application 
+    */</span>
+    <span class="s0">private void </span><span class="s1">displayMenuQuitContinue() {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">c -&gt; continue&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;</span><span class="s0">\t</span><span class="s3">q -&gt; quit&quot;</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    EFFECTS: show the winner of the game 
+             give the user some feedbacks on the exciting level of the game and report the total goals in the game 
+    */</span>
+    <span class="s0">private void </span><span class="s1">showWinner(</span><span class="s0">int </span><span class="s1">goalTeam1</span><span class="s0">, int </span><span class="s1">goalTeam2</span><span class="s0">, </span><span class="s1">Team winner) {</span>
+        <span class="s0">if </span><span class="s1">(goalTeam1 != goalTeam2) {</span>
+            <span class="s1">System.out.println(winner.getName() + </span><span class="s3">&quot; wins the game&quot;</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">feedbackForTheGame(goalTeam1</span><span class="s0">, </span><span class="s1">goalTeam2)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;The result is a draw and &quot; </span><span class="s1">+ winner.getName() + </span><span class="s3">&quot; wins the penalty shootout&quot;</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;What a close game！&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    EFFECTS: give the instruction for the user to correctly input the game result 
+                 split the user-typed String into separated scores by space 
+    */</span>
+    <span class="s0">private </span><span class="s1">String[] parseGameResult(Game g) {</span>
+        <span class="s1">String team1Name = g.getTeam1().getName()</span><span class="s0">;</span>
+        <span class="s1">String team2Name = g.getTeam2().getName()</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;Enter the game result for &quot; </span><span class="s1">+ team1Name + </span><span class="s3">&quot; vs &quot; </span><span class="s1">+ team2Name + </span><span class="s3">&quot; separated by space: &quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">String scoreGame1 = input.nextLine()</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">scoreGame1.split(</span><span class="s3">&quot; &quot;</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//EFFECTS: show all the matchups (the team names on both sides of all the games)</span>
+    <span class="s0">private void </span><span class="s1">showTheMatchups(ListOfGame listOfGame) {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;The next round of listOfGame are: &quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">k = </span><span class="s4">0</span><span class="s0">; </span><span class="s1">k &lt; listOfGame.getSize()</span><span class="s0">; </span><span class="s1">k++) {</span>
+            <span class="s1">String team1Name = listOfGame.getGame(k).getTeam1().getName()</span><span class="s0">;</span>
+            <span class="s1">String team2Name = listOfGame.getGame(k).getTeam2().getName()</span><span class="s0">;</span>
+            <span class="s1">System.out.println(team1Name + </span><span class="s3">&quot; vs &quot; </span><span class="s1">+ team2Name)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">/* 
+    MODIFIES: this 
+    EFFECTS: simulate the final game in a football cup event 
+             show the simulated champion team to the user 
+    */</span>
+    <span class="s0">private void </span><span class="s1">playTheFinal(Game g) {</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;the final game is between &quot; </span><span class="s1">+ g.getTeam1().getName() + </span><span class="s3">&quot; and &quot; </span><span class="s1">+ g.getTeam2().getName())</span><span class="s0">;</span>
+        <span class="s1">String[] splitedScore = parseGameResult(g)</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">goalTeam1 = Integer.parseInt(splitedScore[</span><span class="s4">0</span><span class="s1">])</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">goalTeam2 = Integer.parseInt(splitedScore[</span><span class="s4">1</span><span class="s1">])</span><span class="s0">;</span>
+        <span class="s1">g.getTeam1().setGoals(goalTeam1)</span><span class="s0">;</span>
+        <span class="s1">g.getTeam2().setGoals(goalTeam2)</span><span class="s0">;</span>
+        <span class="s1">Team champion = g.decideWinner()</span><span class="s0">;</span>
+        <span class="s1">showWinner(goalTeam1</span><span class="s0">, </span><span class="s1">goalTeam2</span><span class="s0">, </span><span class="s1">champion)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;The winner of 2022 World Cup is &quot; </span><span class="s1">+ champion.getName())</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s3">&quot;Congratulations to &quot; </span><span class="s1">+ champion.getName() + </span><span class="s3">&quot;!&quot;</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">//EFFECTS: give the user some feedbacks on the exciting level of the game and report the total goals in the game</span>
+    <span class="s0">private void </span><span class="s1">feedbackForTheGame(</span><span class="s0">int </span><span class="s1">goalTeam1</span><span class="s0">, int </span><span class="s1">goalTeam2) {</span>
+        <span class="s0">if </span><span class="s1">(goalTeam1 + goalTeam2 &lt; </span><span class="s4">2</span><span class="s1">) {</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;What a boring game with only one goal!&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else if </span><span class="s1">(goalTeam1 != goalTeam2 &amp;&amp; goalTeam1 + goalTeam2 &gt; </span><span class="s4">3</span><span class="s1">) {</span>
+            <span class="s0">int </span><span class="s1">totalGoals = goalTeam1 + goalTeam2</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;What a thrilling game with &quot; </span><span class="s1">+ totalGoals + </span><span class="s3">&quot; goals&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else if </span><span class="s1">(goalTeam1 != goalTeam2) {</span>
+            <span class="s0">int </span><span class="s1">totalGoals = goalTeam1 + goalTeam2</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;That's a pretty uneventful game with &quot; </span><span class="s1">+ totalGoals + </span><span class="s3">&quot; goals&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// EFFECTS: saves the listOfTeam to file</span>
+    <span class="s0">private void </span><span class="s1">saveListOfTeam() {</span>
+        <span class="s0">try </span><span class="s1">{</span>
+            <span class="s1">jsonWriter.open()</span><span class="s0">;</span>
+            <span class="s1">jsonWriter.write(listOfTeam)</span><span class="s0">;</span>
+            <span class="s1">jsonWriter.close()</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Saved &quot; </span><span class="s1">+ listOfTeam + </span><span class="s3">&quot; to &quot; </span><span class="s1">+ JSON_STORE)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">catch </span><span class="s1">(FileNotFoundException e) {</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Unable to write to file: &quot; </span><span class="s1">+ JSON_STORE)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">// MODIFIES: this</span>
+    <span class="s2">// EFFECTS: loads listOfTeam from file if the data file is not empty</span>
+    <span class="s2">//          initialize a new Scoreboard if the data file is empty</span>
+    <span class="s0">private void </span><span class="s1">loadListOfTeam() {</span>
+        <span class="s0">try </span><span class="s1">{</span>
+            <span class="s1">listOfTeam = jsonReader.readTeams()</span><span class="s0">;</span>
+            <span class="s0">if </span><span class="s1">(!listOfTeam.isEmpty()) {</span>
+                <span class="s1">System.out.println(</span><span class="s3">&quot;Loaded &quot; </span><span class="s1">+ listOfTeam + </span><span class="s3">&quot; from &quot; </span><span class="s1">+ JSON_STORE)</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">initNewScoreboard()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+        <span class="s1">} </span><span class="s0">catch </span><span class="s1">(IOException e) {</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Unable to read from file: &quot; </span><span class="s1">+ JSON_STORE)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">actionPerformed(ActionEvent e) {</span>
+
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+
+
+</pre>
+</body>
+</html>

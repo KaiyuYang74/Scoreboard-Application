@@ -58,7 +58,7 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: teams
+    // MODIFIES: listOfTeam
     // EFFECTS: parses team from JSON object and adds it to listOfTeam
     private void addTeam(ListOfTeam listOfTeam, JSONObject jsonObject) {
         String name = jsonObject.getString("name");

@@ -6,9 +6,11 @@ import model.ListOfTeam;
 import model.Team;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 //Represents a schedule maker and scoreboard application for the knockout stage of a football cup event
@@ -32,11 +34,20 @@ public class ScoreboardApp {
         runScoreboard();
     }
 
+    public ScoreboardApp(ListOfTeam listOfTeam) {
+        input = new Scanner((System.in));
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        this.listOfTeam = listOfTeam;
+        listOfGame = new ListOfGame();
+        listOfGame = new ListOfGame();
+    }
+
     /*
     MODIFIES: this
     EFFECTS: run the scoreboard application
     */
-    private void runScoreboard() {
+    public void runScoreboard() {
         loadScoreboard();
         generateGames();
     }
@@ -96,7 +107,7 @@ public class ScoreboardApp {
     }
 
     //EFFECTS: convert a list of team names represented by strings into the corresponding ListOfTeam
-    private void convertToListOfTeam(List<String> splitedTeamNames) {
+    public void convertToListOfTeam(List<String> splitedTeamNames) {
         listOfTeam.addListOfTeams(splitedTeamNames.stream().map(Team::new).collect(Collectors.toList()));
     }
 
@@ -105,7 +116,7 @@ public class ScoreboardApp {
     EFFECTS: simulate the draw ceremony
              randomly pairing up teams from all qualified teams to generate games
     */
-    private void drawCeremony(ListOfTeam listOfTeam) {
+    public void drawCeremony(ListOfTeam listOfTeam) {
         Collections.shuffle(listOfTeam.getListOfTeams());
     }
 
@@ -290,6 +301,7 @@ public class ScoreboardApp {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
+
 }
 
 
