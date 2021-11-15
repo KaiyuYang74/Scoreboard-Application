@@ -48,6 +48,7 @@ public class JsonReader {
         return listOfTeam;
     }
 
+
     // MODIFIES: listOfTeam
     // EFFECTS: parses listOfTeam from JSON object and adds them to listOfTeam
     private void addTeams(ListOfTeam listOfTeam, JSONObject jsonObject) {

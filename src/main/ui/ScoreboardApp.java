@@ -135,6 +135,21 @@ public class ScoreboardApp {
         oneRoundGames();
     }
 
+
+    /*
+MODIFIES: this
+EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
+         and provoke a mutual recursive call to simulate the games in the current round
+*/
+    public void generateGamesGui() {
+        listOfGame.addGame(new Game((listOfTeam.getTeam(0)), (listOfTeam.getTeam(1))));
+        listOfTeam.removeTeam(0);
+        listOfTeam.removeTeam(0);
+        if (!listOfTeam.isEmpty()) {
+            generateGames();
+        }
+    }
+
     /*
     MODIFIES: this
     EFFECTS: simulate one round of knockout games for a football cup event
@@ -148,7 +163,7 @@ public class ScoreboardApp {
             playTheFinal(finalGame);
             listOfGame.removeAllGames();
         } else if (listOfGame.getSize() != 0) {
-            showTheMatchups(listOfGame);
+            showTheMatchups();
             for (Game g : listOfGame.getListOfGame()) {
                 String[] splitedScore = parseGameResult(g);
                 int goalTeam1 = Integer.parseInt(splitedScore[0]);
@@ -234,7 +249,7 @@ public class ScoreboardApp {
     }
 
     //EFFECTS: show all the matchups (the team names on both sides of all the games)
-    public void showTheMatchups(ListOfGame listOfGame) {
+    public void showTheMatchups() {
         System.out.println("The next round of listOfGame are: ");
         for (int k = 0; k < listOfGame.getSize(); k++) {
             String team1Name = listOfGame.getGame(k).getTeam1().getName();
