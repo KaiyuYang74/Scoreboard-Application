@@ -1,6 +1,6 @@
 {"listOfTeam": [
     {
-        "name": "c",
+        "name": "d",
         "goals": 0
     },
     {
@@ -8,11 +8,11 @@
         "goals": 0
     },
     {
-        "name": "b",
+        "name": "c",
         "goals": 0
     },
     {
-        "name": "d",
+        "name": "b",
         "goals": 0
     }
 ]}

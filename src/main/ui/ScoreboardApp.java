@@ -137,10 +137,10 @@ public class ScoreboardApp {
 
 
     /*
-MODIFIES: this
-EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
+    MODIFIES: this
+    EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
          and provoke a mutual recursive call to simulate the games in the current round
-*/
+    */
     public void generateGamesGui() {
         listOfGame.addGame(new Game((listOfTeam.getTeam(0)), (listOfTeam.getTeam(1))));
         listOfTeam.removeTeam(0);
