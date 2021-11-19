@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 //Represents a matchup maker for the candidate teams in knockout stage of a football cup event
-public class ScoreBoardGui extends JFrame implements ActionListener {
+public class ScoreboardGui extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/scoreboard.json";
     private final JsonWriter jsonWriter;
     private final JsonReader jsonReader;
@@ -35,7 +35,7 @@ public class ScoreBoardGui extends JFrame implements ActionListener {
 
     //MODIFIES: this
     //EFFECTS: initialize and set up the SWING components for my GUI
-    public ScoreBoardGui() {
+    public ScoreboardGui() {
         super("Scoreboard");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
@@ -229,7 +229,7 @@ public class ScoreBoardGui extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        ScoreBoardGui scoreboardGui = new ScoreBoardGui();
+        ScoreboardGui scoreboardGui = new ScoreboardGui();
         scoreboardGui.setVisible(true);
         scoreboardGui.setLocationRelativeTo(null);
     }

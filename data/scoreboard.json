@@ -1,14 +1,14 @@
 {"listOfTeam": [
     {
+        "name": "c",
+        "goals": 0
+    },
+    {
         "name": "d",
         "goals": 0
     },
     {
         "name": "a",
-        "goals": 0
-    },
-    {
-        "name": "c",
         "goals": 0
     },
     {

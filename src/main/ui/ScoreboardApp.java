@@ -40,7 +40,6 @@ public class ScoreboardApp {
         jsonReader = new JsonReader(JSON_STORE);
         this.listOfTeam = listOfTeam;
         listOfGame = new ListOfGame();
-        listOfGame = new ListOfGame();
     }
 
     /*
