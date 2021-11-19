@@ -233,6 +233,7 @@ public class ScoreBoardGui extends JFrame implements ActionListener {
         scoreboardGui.setVisible(true);
         scoreboardGui.setLocationRelativeTo(null);
     }
+
 }
 
 
