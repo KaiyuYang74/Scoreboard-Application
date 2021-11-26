@@ -85,5 +85,28 @@ public class ListOfTeamTest {
         }
         assertTrue(testListOfTeam.getListOfTeams().contains(usa));
     }
+
+    @Test
+    public void testClearListOfTeam() {
+        assertEquals(0,testListOfTeam.getListOfTeams().size());
+        testListOfTeam.addTeam(canada);
+        testListOfTeam.addTeam(usa);
+        assertEquals(2,testListOfTeam.getListOfTeams().size());
+        testListOfTeam.clearListOfTeam();
+        assertEquals(0,testListOfTeam.getListOfTeams().size());
+    }
+
+    @Test
+    public void testDrawCeremony() {
+        testListOfTeam.addTeam(canada);
+        testListOfTeam.addTeam(usa);
+        testListOfTeam.addTeam(japan);
+        testListOfTeam.addTeam(china);
+        testListOfTeam.drawCeremony();
+        testListOfTeam.getListOfTeams().contains(canada);
+        testListOfTeam.getListOfTeams().contains(usa);
+        testListOfTeam.getListOfTeams().contains(china);
+        testListOfTeam.getListOfTeams().contains(japan);
+    }
 }
 
