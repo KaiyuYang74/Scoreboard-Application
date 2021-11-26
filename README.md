@@ -56,39 +56,66 @@ games from file.
 ##Phase 4: Task 2
 **a sample of events occured when running the console-based ui:**    
 
-Thu Nov 25 16:02:16 PST 2021  
-Add the candidate teams: Canada France Japan USA  
-Thu Nov 25 16:02:16 PST 2021  
-The draw is conducted  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
+Add the candidate teams:France  
+Fri Nov 26 13:56:29 PST 2021  
+Add the candidate teams:Japan  
+Fri Nov 26 13:56:29 PST 2021  
+Add the candidate teams:Spain  
+Fri Nov 26 13:56:29 PST 2021  
+Add the candidate teams:Korea  
+Fri Nov 26 13:56:29 PST 2021  
 A new game is added to listOfGame  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
 Remove the team in listOfTeam  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
 Remove the team in listOfTeam  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
 A new game is added to listOfGame  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
 Remove the team in listOfTeam  
-Thu Nov 25 16:02:16 PST 2021  
+Fri Nov 26 13:56:29 PST 2021  
 Remove the team in listOfTeam  
-Thu Nov 25 16:02:20 PST 2021  
+Fri Nov 26 13:56:32 PST 2021  
 The winner of a game is determined  
-Thu Nov 25 16:02:22 PST 2021   
-The winner of a game is determined  
-Thu Nov 25 16:02:22 PST 2021  
+Fri Nov 26 13:56:32 PST 2021  
 a penalty kick game is played  
-Thu Nov 25 16:02:22 PST 2021  
+Fri Nov 26 13:56:32 PST 2021  
+Add the candidate teams:France  
+Fri Nov 26 13:56:33 PST 2021  
+The winner of a game is determined  
+Fri Nov 26 13:56:33 PST 2021  
+Add the candidate teams:Korea  
+Fri Nov 26 13:56:33 PST 2021  
 Remove all the finished games in listOfGame  
+Fri Nov 26 13:56:41 PST 2021  
+The draw is conducted  
+Fri Nov 26 13:56:41 PST 2021  
+A new game is added to listOfGame  
+Fri Nov 26 13:56:41 PST 2021  
+Remove the team in listOfTeam  
+Fri Nov 26 13:56:41 PST 2021  
+Remove the team in listOfTeam  
+Fri Nov 26 13:56:47 PST 2021  
+The winner of a game is determined  
 
 **a sample of events occured when running the GUI:**
 
-Thu Nov 25 16:08:46 PST 2021  
-Add the candidate teams: Canada USA France China  
-Thu Nov 25 16:08:46 PST 2021  
+Fri Nov 26 14:09:23 PST 2021  
+Add the candidate teams:France  
+Fri Nov 26 14:09:23 PST 2021  
+Add the candidate teams:Japan  
+Fri Nov 26 14:09:23 PST 2021  
+Add the candidate teams:Spain  
+Fri Nov 26 14:09:23 PST 2021  
+Add the candidate teams:Korea  
+Fri Nov 26 14:09:52 PST 2021  
+Add the candidate teams: Italy Argentina  
+Fri Nov 26 14:09:52 PST 2021  
 The draw is conducted  
-Thu Nov 25 16:08:50 PST 2021  
+Fri Nov 26 14:09:57 PST 2021  
 The listOfTeam is cleared  
+
 
 
 ##Citation

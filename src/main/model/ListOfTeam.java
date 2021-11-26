@@ -29,6 +29,8 @@ public class ListOfTeam implements Writable {
     */
     public void addTeam(Team team) {
         listOfTeam.add(team);
+        Event e = new Event("Add the candidate teams:" + team.getName());
+        EventLog.getInstance().logEvent(e);
     }
 
     /*

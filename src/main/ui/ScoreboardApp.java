@@ -31,14 +31,6 @@ public class ScoreboardApp {
         runScoreboard();
     }
 
-    public ScoreboardApp(ListOfTeam listOfTeam) {
-        input = new Scanner((System.in));
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
-        this.listOfTeam = listOfTeam;
-        listOfGame = new ListOfGame();
-    }
-
     /*
     MODIFIES: this
     EFFECTS: run the scoreboard application
