@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 // Represents a list of teams
 public class ListOfTeam implements Writable {
     private List<Team> listOfTeam;
+    private static EventLog eventLog;
 
     /*
     MODIFIES: this
@@ -35,6 +37,8 @@ public class ListOfTeam implements Writable {
     */
     public void removeTeam(int index) {
         listOfTeam.remove(index);
+        Event e = new Event("Remove the team in listOfTeam");
+        EventLog.getInstance().logEvent(e);
     }
 
     /*
@@ -58,7 +62,32 @@ public class ListOfTeam implements Writable {
 
     //setter
     public void addListOfTeams(List<Team> listOfTeam) {
+        StringBuffer  teamNames = new StringBuffer("");
         this.listOfTeam = Stream.concat(this.listOfTeam.stream(), listOfTeam.stream()).collect(Collectors.toList());
+        for (Team team: listOfTeam) {
+            teamNames.append(" " + team.getName());
+        }
+        Event e = new Event("Add the candidate teams:" + teamNames);
+        EventLog.getInstance().logEvent(e);
+    }
+
+    /*
+    MODIFIES: this
+    EFFECTS: simulate the draw ceremony
+             randomly pairing up teams from all qualified teams to generate games
+    */
+    public void drawCeremony() {
+        Collections.shuffle(listOfTeam);
+        Event e = new Event("The draw is conducted");
+        EventLog.getInstance().logEvent(e);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: remove all the teams from the listOfTeam
+    public  void clearListOfTeam() {
+        listOfTeam = new ArrayList<>();
+        Event e = new Event("The listOfTeam is cleared");
+        EventLog.getInstance().logEvent(e);
     }
 
     @Override

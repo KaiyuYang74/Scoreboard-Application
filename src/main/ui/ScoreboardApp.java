@@ -1,9 +1,6 @@
 package ui;
 
-import model.Game;
-import model.ListOfGame;
-import model.ListOfTeam;
-import model.Team;
+import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -79,7 +76,7 @@ public class ScoreboardApp {
         List<String> splitedTeamNames = parseTeamNames();
         convertToListOfTeam(splitedTeamNames);
         quitIfInValid(listOfTeam);
-        drawCeremony(listOfTeam);
+        listOfTeam.drawCeremony();
     }
 
     /*
@@ -112,15 +109,6 @@ public class ScoreboardApp {
 
     /*
     MODIFIES: this
-    EFFECTS: simulate the draw ceremony
-             randomly pairing up teams from all qualified teams to generate games
-    */
-    public void drawCeremony(ListOfTeam listOfTeam) {
-        Collections.shuffle(listOfTeam.getListOfTeams());
-    }
-
-    /*
-    MODIFIES: this
     EFFECTS: a natural recursive call to iterate over the ListOfTeam, generate all games in the current round
              and provoke a mutual recursive call to simulate the games in the current round
     */
@@ -146,6 +134,7 @@ public class ScoreboardApp {
             Game finalGame = listOfGame.getGame(0);
             playTheFinal(finalGame);
             listOfGame.removeAllGames();
+            //listOfGame.removeGame(0);
         } else if (listOfGame.getSize() != 0) {
             showTheMatchups();
             for (Game g : listOfGame.getListOfGame()) {
@@ -161,7 +150,7 @@ public class ScoreboardApp {
             listOfGame.removeAllGames();
             displayMenuQuitContinue();
             quit();
-            drawCeremony(listOfTeam);
+            listOfTeam.drawCeremony();
             generateGames();
         }
     }
@@ -176,8 +165,11 @@ public class ScoreboardApp {
         command = command.toLowerCase();
         if (command.equals("q")) {
             saveScoreboard();
-            System.exit(0);
             System.out.println("\nGoodbye!");
+            for (Event e: EventLog.getInstance()) {
+                System.out.println(e.toString());
+            }
+            System.exit(0);
         }
     }
 
@@ -258,6 +250,9 @@ public class ScoreboardApp {
         showWinner(goalTeam1, goalTeam2, champion);
         System.out.println("The winner of 2022 World Cup is " + champion.getName());
         System.out.println("Congratulations to " + champion.getName() + "!");
+        for (Event e: EventLog.getInstance()) {
+            System.out.println(e.toString());
+        }
     }
 
     //EFFECTS: give the user some feedbacks on the exciting level of the game and report the total goals in the game

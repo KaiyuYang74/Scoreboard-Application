@@ -1,9 +1,5 @@
 package model;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import persistence.Writable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +21,8 @@ public class ListOfGame {
     */
     public void addGame(Game game) {
         listOfGame.add(game);
-    }
-
-    /*
-    MODIFIES: this
-    EFFECTS: remove the game on the given index from the list of games
-    */
-    public void removeGame(int index) {
-        listOfGame.remove(index);
+        Event e = new Event("A new game is added to listOfGame");
+        EventLog.getInstance().logEvent(e);
     }
 
     /*
@@ -41,6 +31,8 @@ public class ListOfGame {
     */
     public void removeAllGames() {
         listOfGame.clear();
+        Event e = new Event("Remove all the finished games in listOfGame");
+        EventLog.getInstance().logEvent(e);
     }
 
     /*

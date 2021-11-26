@@ -25,6 +25,8 @@ public class Game {
      *         then play a penalty kick game to determine the winner
      */
     public Team decideWinner() {
+        Event e = new Event("The winner of a game is determined");
+        EventLog.getInstance().logEvent(e);
         if (team1.getGoals() > team2.getGoals()) {
             return team1;
         } else if (team1.getGoals() < team2.getGoals()) {
@@ -39,6 +41,8 @@ public class Game {
      *          randomly return a team as the winner of the penalty kick game
      */
     public Team penaltyKick() {
+        Event e = new Event("a penalty kick game is played");
+        EventLog.getInstance().logEvent(e);
         Random random = new Random();
         int penaltyKickResult = random.nextInt(2);
         if (penaltyKickResult == 0) {

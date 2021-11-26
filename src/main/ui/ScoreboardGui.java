@@ -1,15 +1,19 @@
 package ui;
 
-import model.ListOfTeam;
-import model.Team;
+import model.*;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import persistence.JsonReader;
 import persistence.JsonWriter;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -32,6 +36,7 @@ public class ScoreboardGui extends JFrame implements ActionListener {
     private final JLabel labelLeft;
     private final JPanel paneTopRight;
     private ListOfTeam listOfTeam;
+
 
     //MODIFIES: this
     //EFFECTS: initialize and set up the SWING components for my GUI
@@ -96,9 +101,17 @@ public class ScoreboardGui extends JFrame implements ActionListener {
         setResizable(false);
         labelLeft.setVisible(true);
         labelRight.setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent ev) {
+                for (Event e : EventLog.getInstance()) {
+                    System.out.println(e.toString());
+                }
+                dispose();
+            }
+        });
     }
 
     //EFFECTS: set up a splash screen at the start of my program
@@ -136,14 +149,13 @@ public class ScoreboardGui extends JFrame implements ActionListener {
         if (e.getActionCommand().equals("myButton1")) {
             String teamNames = (String) JOptionPane.showInputDialog(this, "Input the candidate teams：",
                     "Scoreboard GUI", JOptionPane.PLAIN_MESSAGE, null, null, null);
-            ScoreboardApp scoreboardApp = new ScoreboardApp(listOfTeam);
             StringBuilder valueLeft = new StringBuilder();
             StringBuilder valueRight = new StringBuilder();
             textAreaLeft.setVisible(true);
             textAreaRight.setVisible(true);
             listOfTeam.addListOfTeams(parseteamNames(teamNames));
             printCandidateTeams(valueLeft);
-            scoreboardApp.drawCeremony(listOfTeam);
+            listOfTeam.drawCeremony();
             printDrawResult(valueRight);
         } else if (e.getActionCommand().equals("myButton2")) {
             saveListOfTeam();
@@ -154,7 +166,7 @@ public class ScoreboardGui extends JFrame implements ActionListener {
             textAreaLeft.setText(null);
             textAreaLeft.setVisible(false);
             textAreaRight.setVisible(false);
-            listOfTeam = new ListOfTeam();
+            listOfTeam.clearListOfTeam();
         }
     }
 

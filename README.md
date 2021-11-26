@@ -53,5 +53,43 @@ draw ceremony of the initial input teams until the final champion has been deter
 - As a user, when I start the application, I want to be given the option to load my the listOfTeam for next round of
 games from file.
 
+##Phase 4: Task 2
+**a sample of events occured when running the console-based ui:**    
+
+Thu Nov 25 16:02:16 PST 2021  
+Add the candidate teams: Canada France Japan USA  
+Thu Nov 25 16:02:16 PST 2021  
+The draw is conducted  
+Thu Nov 25 16:02:16 PST 2021  
+A new game is added to listOfGame  
+Thu Nov 25 16:02:16 PST 2021  
+Remove the team in listOfTeam  
+Thu Nov 25 16:02:16 PST 2021  
+Remove the team in listOfTeam  
+Thu Nov 25 16:02:16 PST 2021  
+A new game is added to listOfGame  
+Thu Nov 25 16:02:16 PST 2021  
+Remove the team in listOfTeam  
+Thu Nov 25 16:02:16 PST 2021  
+Remove the team in listOfTeam  
+Thu Nov 25 16:02:20 PST 2021  
+The winner of a game is determined  
+Thu Nov 25 16:02:22 PST 2021   
+The winner of a game is determined  
+Thu Nov 25 16:02:22 PST 2021  
+a penalty kick game is played  
+Thu Nov 25 16:02:22 PST 2021  
+Remove all the finished games in listOfGame  
+
+**a sample of events occured when running the GUI:**
+
+Thu Nov 25 16:08:46 PST 2021  
+Add the candidate teams: Canada USA France China  
+Thu Nov 25 16:08:46 PST 2021  
+The draw is conducted  
+Thu Nov 25 16:08:50 PST 2021  
+The listOfTeam is cleared  
+
+
 ##Citation
 - My JSON related codes (persistence realization) are modeled from the demo application provided by Prof. Paul Carter.

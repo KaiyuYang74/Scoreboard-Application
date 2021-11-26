@@ -36,15 +36,6 @@ public class ListOfGameTest {
         assertTrue(listOfGame.getListOfGame().contains(testGame21));
     }
 
-    @Test
-    public void testRemoveGame() {
-        listOfGame.addGame(testGame21);
-        assertEquals(1,listOfGame.getSize());
-        assertTrue(listOfGame.getListOfGame().contains(testGame21));
-        listOfGame.removeGame(0);
-        assertEquals(0,listOfGame.getSize());
-        assertFalse(listOfGame.getListOfGame().contains(testGame21));
-    }
 
     @Test
     public void testRemoveAllGames() {
