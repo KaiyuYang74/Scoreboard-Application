@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 // Represents a list of teams
 public class ListOfTeam implements Writable {
     private List<Team> listOfTeam;
-    private static EventLog eventLog;
+    //private static EventLog eventLog;
 
     /*
     MODIFIES: this
@@ -107,6 +107,8 @@ public class ListOfTeam implements Writable {
         for (Team t: listOfTeam) {
             jsonArray.put(t.toJson());
         }
+        Event e = new Event("The listOfTeam is saved");
+        EventLog.getInstance().logEvent(e);
         return jsonArray;
     }
 }
