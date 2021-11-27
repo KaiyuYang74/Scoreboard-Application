@@ -1,18 +1,18 @@
 {"listOfTeam": [
     {
-        "name": "Canada",
+        "name": "c",
         "goals": 0
     },
     {
-        "name": "USA",
+        "name": "d",
         "goals": 0
     },
     {
-        "name": "Japan",
+        "name": "a",
         "goals": 0
     },
     {
-        "name": "France",
+        "name": "b",
         "goals": 0
     }
 ]}
